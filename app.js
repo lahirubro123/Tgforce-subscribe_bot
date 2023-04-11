@@ -11,7 +11,6 @@ bot.on('message', (msg) => {
     const user = msg.from.first_name;
     const formattedMessage = message.replace('%user%', user);
     test = formattedMessage, { parse_mode: 'HTML' };
-    console.log(user);
 
     // Check if the user has joined your channel
     bot.getChatMember(`@${channel}`, msg.from.id)
