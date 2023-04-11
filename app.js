@@ -54,6 +54,7 @@ bot.on('callback_query', async (callbackQuery) => {
     
     //const message = callbackQuery.message;
     const groupChatId = callbackQuery.message.chat.id;
+    const msg_id = callbackQuery.message.message_id
 
     if (callbackQuery.data === 'unmute') {
         const userId = callbackQuery.from.id;
@@ -62,6 +63,7 @@ bot.on('callback_query', async (callbackQuery) => {
          if (res.status === 'member') {
           // User is a member of the channel
           console.log(`User ${userId} is a member of the channel`);
+          bot.deleteMessage(groupChatId, msg_id)
           bot.restrictChatMember(groupChatId, userId, { can_send_messages: true })
           .then(() => {
           console.log(`User ${userId} has been unmuted.`);
