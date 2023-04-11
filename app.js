@@ -11,11 +11,16 @@ bot.on('message', (msg) => {
     const user = msg.from.first_name;
     const formattedMessage = message.replace('%user%', user);
     test = formattedMessage, { parse_mode: 'HTML' };
+    console.log(user);
 
     // Check if the user has joined your channel
     bot.getChatMember(`@${channel}`, msg.from.id)
       .then((res) => {
         // If the user is not a member, send a join button
+        console.log(res.status);
+        if (res.status === 'creator'){
+          return
+        }
         if (res.status !== 'member') {
         // mute user 
         bot.restrictChatMember(chatId, msg.from.id, { can_send_messages: false })
@@ -59,6 +64,7 @@ bot.on('callback_query', async (callbackQuery) => {
         const userId = callbackQuery.from.id;
         bot.getChatMember(`@${channel}`, userId)
         .then((res) => {
+
          if (res.status === 'member') {
           // User is a member of the channel
           console.log(`User ${userId} is a member of the channel`);
@@ -67,8 +73,11 @@ bot.on('callback_query', async (callbackQuery) => {
           .then(() => {
           console.log(`User ${userId} has been unmuted.`);
           });
-    
+          // User is a admin,owner of the channel
+          }else if (res.status === 'creator'){
+            bot.deleteMessage(groupChatId, msg_id)
           }
+
           else {
           // User is not a member of the channel
           console.log(`User ${userId} is not a member of the channel`);
